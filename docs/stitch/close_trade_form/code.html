@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f1ebd",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101222",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>TradingNotes - Close Trade</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-2xl mx-auto border-x border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-slate-900/50 p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 backdrop-blur-md">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+<span class="material-symbols-outlined">close</span>
+</div>
+<h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight flex-1 ml-2">Close Trade</h1>
+<div class="flex items-center justify-end">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">check</span>
+                    Save
+                </button>
+</div>
+</div>
+<div class="flex-1 pb-24">
+<!-- FINAL OUTCOME SECTION -->
+<section class="p-4">
+<h3 class="text-primary text-xs font-bold uppercase tracking-widest mb-4">Final Outcome</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col flex-1">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold pb-2">Summary PnL</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">$</span>
+<input class="form-input w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary pl-8 p-3.5 text-base" placeholder="0.00" step="0.01" type="number"/>
+</div>
+</div>
+<div class="flex flex-col flex-1">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold pb-2">Final Status</label>
+<div class="flex items-center h-[54px] px-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/50">
+<span class="material-symbols-outlined text-green-500 mr-2">check_circle</span>
+<span class="text-slate-600 dark:text-slate-400 font-medium">Closed</span>
+</div>
+</div>
+<div class="flex flex-col md:col-span-2">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold pb-2">End Time</label>
+<div class="flex w-full items-stretch rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 overflow-hidden focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
+<input class="form-input w-full border-0 bg-transparent p-3.5 text-base focus:ring-0" type="datetime-local"/>
+<div class="flex items-center px-4 bg-slate-50 dark:bg-slate-800 border-l border-slate-200 dark:border-slate-800">
+<span class="material-symbols-outlined text-slate-400">calendar_today</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<hr class="mx-4 border-slate-200 dark:border-slate-800"/>
+<!-- PERFORMANCE REVIEW SECTION -->
+<section class="p-4">
+<h3 class="text-primary text-xs font-bold uppercase tracking-widest mb-4">Performance Review</h3>
+<div class="space-y-6">
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">Execution Score</label>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm font-bold">8/10</span>
+</div>
+<input class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="1" type="range" value="8"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">Result Score</label>
+<span class="bg-primary/10 text-primary px-2 py-0.5 rounded text-sm font-bold">5/10</span>
+</div>
+<input class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary" max="10" min="1" type="range" value="5"/>
+</div>
+<div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">verified</span>
+<span class="text-slate-700 dark:text-slate-300 font-medium">Plan Followed?</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox" value=""/>
+<div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<hr class="mx-4 border-slate-200 dark:border-slate-800"/>
+<!-- RETROSPECTIVE SECTION -->
+<section class="p-4">
+<h3 class="text-primary text-xs font-bold uppercase tracking-widest mb-4">Retrospective</h3>
+<div class="space-y-4">
+<div class="flex flex-col">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold pb-2">What went well?</label>
+<textarea class="form-textarea w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary p-3.5 text-base" placeholder="Ex: Patient entry, good risk management..." rows="3"></textarea>
+</div>
+<div class="flex flex-col">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold pb-2">What could be improved?</label>
+<textarea class="form-textarea w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:border-primary focus:ring-1 focus:ring-primary p-3.5 text-base" placeholder="Ex: Trailing stop was too tight..." rows="3"></textarea>
+</div>
+<div class="flex flex-col">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold pb-2">Review Tags</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 rounded-full bg-primary text-white text-xs font-medium cursor-pointer flex items-center gap-1">
+                                Disciplined <span class="material-symbols-outlined text-[14px]">close</span>
+</span>
+<span class="px-3 py-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
+                                FOMO
+                            </span>
+<span class="px-3 py-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
+                                Late Entry
+                            </span>
+<span class="px-3 py-1.5 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-medium cursor-pointer hover:bg-primary/20 transition-colors">
+                                Technical Error
+                            </span>
+<span class="px-3 py-1.5 rounded-full border border-dashed border-slate-400 text-slate-500 text-xs font-medium cursor-pointer flex items-center gap-1 hover:border-primary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[14px]">add</span> Add Tag
+                            </span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Actions -->
+<div class="fixed bottom-0 left-0 right-0 max-w-2xl mx-auto bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 z-20">
+<button class="w-full bg-primary text-white h-14 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
+                Save &amp; Close Trade
+            </button>
+</div>
+<!-- Navigation Placeholder to match design style -->
+<div class="flex gap-2 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 px-4 pb-6 pt-2 mt-auto">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[10px] font-medium uppercase tracking-tight">Journal</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">insert_chart</span>
+<p class="text-[10px] font-medium uppercase tracking-tight">Markets</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">track_changes</span>
+<p class="text-[10px] font-medium uppercase tracking-tight">Performance</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-[10px] font-medium uppercase tracking-tight">Settings</p>
+</a>
+</div>
+</div>
+</body></html>

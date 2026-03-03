@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TradingNotes - Add Leg</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f1ebd",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101222",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-dark dark:bg-background-dark text-slate-100 font-display dark">
+<div class="flex flex-col min-h-screen max-w-2xl mx-auto bg-[#0f172a] shadow-xl">
+<!-- Header -->
+<header class="flex items-center justify-between px-4 py-3 border-b border-slate-800 sticky top-0 bg-[#0f172a]/80 backdrop-blur-md z-10">
+<button class="flex items-center text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">close</span>
+<span class="ml-1 text-sm font-medium">Cancel</span>
+</button>
+<h1 class="text-lg font-bold tracking-tight">Add Leg</h1>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-lg text-sm font-semibold transition-all shadow-sm">
+                Save Leg
+            </button>
+</header>
+<main class="flex-1 overflow-y-auto p-4 space-y-6">
+<!-- Section: Instrument Details -->
+<section class="space-y-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-xl">account_balance_wallet</span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-100">Instrument Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Symbol/Name</label>
+<div class="relative">
+<input class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" placeholder="e.g. BTC/USDT" type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-slate-400 text-sm">search</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Account / Currency</label>
+<select class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm">
+<option>Binance - USDT</option>
+<option>ByBit - USDC</option>
+<option>MetaTrader - USD</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Direction</label>
+<div class="flex p-1 bg-slate-900 rounded-lg h-11 border border-slate-800">
+<button class="flex-1 flex items-center justify-center gap-1 rounded-md bg-white dark:bg-slate-700 shadow-sm text-green-600 dark:text-green-400 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span> LONG
+                            </button>
+<button class="flex-1 flex items-center justify-center gap-1 rounded-md text-slate-500 dark:text-slate-400 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_down</span> SHORT
+                            </button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Instrument Type</label>
+<select class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm">
+<option>Spot</option>
+<option>Futures</option>
+<option>Options</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Leverage</label>
+<div class="relative flex items-center">
+<input class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" max="125" min="1" type="number" value="1"/>
+<span class="absolute right-3 text-slate-400 text-xs font-bold">x</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Execution Plan -->
+<section class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-xl">insights</span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-100">Initial Plan</h2>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Entry Price</label>
+<input class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" placeholder="0.00" type="number"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Stop Loss</label>
+<input class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" placeholder="0.00" type="number"/>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">Risk Budget</label>
+<div class="relative">
+<input class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" placeholder="100" type="number"/>
+<span class="absolute right-3 top-2.5 text-slate-400 text-xs">$</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-xs font-semibold text-slate-400 mb-1 ml-1">ATR Value</label>
+<input class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" placeholder="1.24" step="0.01" type="number"/>
+</div>
+</div>
+<div class="bg-primary/10 p-3 rounded-lg flex items-center justify-between border border-primary/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calculate</span>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-400">Estimated Position Size</span>
+</div>
+<span class="text-sm font-bold text-primary">0.00 Units</span>
+</div>
+</section>
+<!-- Section: Note -->
+<section class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-xl">sticky_note_2</span>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-100">Trade Thesis / Note</h2>
+</div>
+<textarea class="w-full bg-slate-900/50 border-slate-800 rounded-lg py-2.5 px-3 text-slate-100 placeholder:text-slate-500 focus:border-primary focus:ring-0 transition-colors text-sm" placeholder="Why are you taking this trade? List confluences or setup details..." rows="4"></textarea>
+</section>
+</main>
+<!-- Form Actions (Mobile Footer Style) -->
+<footer class="p-4 border-t border-slate-800 bg-[#0f172a]">
+<div class="flex items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-slate-400">
+<span class="material-symbols-outlined text-sm">info</span>
+<span class="text-[10px] uppercase font-bold tracking-widest">Manual entry mode</span>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 text-sm font-medium text-slate-400 hover:bg-slate-800 rounded-lg transition-colors">Draft</button>
+<button class="px-6 py-2 bg-primary text-white text-sm font-bold rounded-lg shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">Add to Trade</button>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

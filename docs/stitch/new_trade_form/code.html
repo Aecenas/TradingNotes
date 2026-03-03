@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f1ebd",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101222",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none !important;
+            border-color: #0f1ebd !important;
+            ring: 0 !important;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-xl overflow-x-hidden">
+<!-- Header -->
+<header class="sticky top-0 z-10 flex items-center bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-4 border-b border-slate-200 dark:border-slate-800 justify-between">
+<button class="flex items-center gap-1 text-slate-600 dark:text-slate-400">
+<span class="material-symbols-outlined text-[22px]">close</span>
+<span class="text-sm font-medium">Cancel</span>
+</button>
+<h1 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">New Trade</h1>
+<button class="bg-primary text-white px-4 py-1.5 rounded-full text-sm font-bold transition-opacity hover:opacity-90">
+                Save
+            </button>
+</header>
+<form class="flex flex-col gap-6 p-4 pb-12">
+<!-- Section 1: Basic Info -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">info</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider">Basic Info</h2>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Title</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary transition-colors" placeholder="e.g., BTC Breakout" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Market</label>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary transition-colors" placeholder="BTC/USDT" type="text"/>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Structure</label>
+<select class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 focus:border-primary transition-colors appearance-none">
+<option>Long</option>
+<option>Short</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 bottom-3 text-slate-400 pointer-events-none">unfold_more</span>
+</div>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Strategy Type</label>
+<select class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 focus:border-primary transition-colors appearance-none">
+<option value="">Select Strategy</option>
+<option value="breakout">Breakout</option>
+<option value="mean_reversion">Mean Reversion</option>
+<option value="trend_continuation">Trend Continuation</option>
+<option value="scalp">Scalp</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 bottom-3 text-slate-400 pointer-events-none">expand_more</span>
+</div>
+</div>
+</section>
+<!-- Section 2: The Plan -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center gap-2 border-t border-slate-100 dark:border-slate-800 pt-6">
+<span class="material-symbols-outlined text-primary text-xl">psychology</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider">The Plan (Mental Model)</h2>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Entry Reason &amp; Thesis</label>
+<textarea class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary transition-colors resize-none" placeholder="What is the setup? Why enter now?" rows="4"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Target Price (Expectation)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg pl-7 pr-4 py-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary transition-colors" placeholder="0.00" type="number"/>
+</div>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1 ml-1">Stop Price (Invalidation)</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+<input class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg pl-7 pr-4 py-3 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:border-primary transition-colors" placeholder="0.00" type="number"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Metadata -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center gap-2 border-t border-slate-100 dark:border-slate-800 pt-6">
+<span class="material-symbols-outlined text-primary text-xl">label</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-sm font-bold uppercase tracking-wider">Metadata</h2>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 ml-1">Tags</label>
+<div class="flex flex-wrap gap-2 p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg min-h-[56px] items-center">
+<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+                                Crypto <span class="material-symbols-outlined text-sm cursor-pointer">close</span>
+</span>
+<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2.5 py-1 rounded-full text-xs font-semibold">
+                                HighVol <span class="material-symbols-outlined text-sm cursor-pointer">close</span>
+</span>
+<input class="bg-transparent border-none p-0 text-xs focus:ring-0 w-24" placeholder="Add tag..." type="text"/>
+</div>
+</div>
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 ml-1">Initial Status</label>
+<div class="grid grid-cols-2 gap-2">
+<label class="relative cursor-pointer">
+<input checked="" class="peer sr-only" name="status" type="radio" value="draft"/>
+<div class="flex items-center justify-center py-3 px-4 rounded-lg border border-slate-200 dark:border-slate-800 peer-checked:border-primary peer-checked:bg-primary/5 text-slate-500 dark:text-slate-400 peer-checked:text-primary transition-all">
+<span class="text-sm font-semibold">Draft</span>
+</div>
+</label>
+<label class="relative cursor-pointer">
+<input class="peer sr-only" name="status" type="radio" value="active"/>
+<div class="flex items-center justify-center py-3 px-4 rounded-lg border border-slate-200 dark:border-slate-800 peer-checked:border-primary peer-checked:bg-primary/5 text-slate-500 dark:text-slate-400 peer-checked:text-primary transition-all">
+<span class="text-sm font-semibold">Active</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+</section>
+</form>
+<!-- Image Placeholder / Background Decor -->
+<div class="absolute bottom-0 right-0 p-8 opacity-5 pointer-events-none overflow-hidden h-64 w-64">
+<div class="w-full h-full bg-primary rounded-full blur-3xl"></div>
+</div>
+</div>
+</body></html>
