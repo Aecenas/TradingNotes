@@ -8,6 +8,7 @@ import '../../../domain/entities/event.dart';
 import '../../../domain/entities/leg.dart';
 import '../../../domain/entities/trade.dart';
 import '../../providers.dart';
+import '../../theme/app_theme.dart';
 import '../../widgets/form_widgets.dart';
 
 class TradeDetailPage extends ConsumerStatefulWidget {
@@ -82,6 +83,7 @@ class _TradeDetailPageState extends ConsumerState<TradeDetailPage> {
     if (trade == null) {
       return;
     }
+
     final archived = trade.status != TradeStatus.archived;
     final result = await ref.read(archiveTradeUseCaseProvider)(
       trade.id,
@@ -96,6 +98,7 @@ class _TradeDetailPageState extends ConsumerState<TradeDetailPage> {
       ).showSnackBar(SnackBar(content: Text(result.error!.message)));
       return;
     }
+
     await _loadAll();
   }
 
@@ -131,6 +134,7 @@ class _TradeDetailPageState extends ConsumerState<TradeDetailPage> {
       ).showSnackBar(SnackBar(content: Text(result.error!.message)));
       return;
     }
+
     await _loadAll();
   }
 
@@ -166,6 +170,7 @@ class _TradeDetailPageState extends ConsumerState<TradeDetailPage> {
       ).showSnackBar(SnackBar(content: Text(result.error!.message)));
       return;
     }
+
     await _loadAll();
   }
 
@@ -178,7 +183,7 @@ class _TradeDetailPageState extends ConsumerState<TradeDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Trade 详情'),
+        title: const Text('交易详情'),
         actions: [
           IconButton(
             tooltip: '返回交易列表',
@@ -194,199 +199,344 @@ class _TradeDetailPageState extends ConsumerState<TradeDetailPage> {
           ? Center(child: Text(_error!))
           : _trade == null
           ? const Center(child: Text('Trade 不存在'))
-          : _buildContent(),
+          : RefreshIndicator(
+              onRefresh: _loadAll,
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(14, 10, 14, 24),
+                children: [_buildContent()],
+              ),
+            ),
     );
   }
 
   Widget _buildContent() {
     final trade = _trade!;
-    return ListView(
-      padding: const EdgeInsets.all(12),
+
+    return Column(
       children: [
-        LabeledSection(
-          title: '顶部摘要',
-          children: [
-            Text(trade.title, style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 8),
-            Text('市场: ${trade.market.label}'),
-            Text('策略: ${trade.strategyType.label}'),
-            Text('结构: ${trade.structureType.label}'),
-            Text('状态: ${trade.status.label}'),
-            Text(
-              '时间: ${formatDateTime(trade.startTime)} ~ ${formatDateTime(trade.endTime)}',
-            ),
-            Text('汇总 PnL: ${formatNumber(trade.summaryPnl)}'),
-            if (trade.tags.isNotEmpty) Text('标签: ${trade.tags.join(', ')}'),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: [
-                OutlinedButton.icon(
-                  onPressed: () => _go('/trades/${trade.id}/edit'),
-                  icon: const Icon(Icons.edit),
-                  label: const Text('编辑 Trade'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () => context.go('/trades'),
-                  icon: const Icon(Icons.arrow_back),
-                  label: const Text('返回列表'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () =>
-                      _go('/events/new?tradeId=${trade.id}&scope=trade'),
-                  icon: const Icon(Icons.add_comment),
-                  label: const Text('添加 Trade 事件'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () => _go('/trades/${trade.id}/review'),
-                  icon: const Icon(Icons.rate_review_outlined),
-                  label: const Text('编辑复盘'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: () => _go('/trades/${trade.id}/close'),
-                  icon: const Icon(Icons.flag),
-                  label: const Text('结束交易'),
-                ),
-                OutlinedButton.icon(
-                  onPressed: _toggleArchive,
-                  icon: const Icon(Icons.archive),
-                  label: Text(
-                    trade.status == TradeStatus.archived ? '取消归档' : '归档',
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+        _buildTopCard(trade),
+        const SizedBox(height: 12),
         LabeledSection(
           title: '交易背景',
+          subtitle: '记录这笔交易最初的思考与边界条件。',
           children: [
-            _rowText('开仓理由', trade.entryReason),
-            _rowText('Thesis', trade.thesis),
-            _rowText('预期', trade.expectation),
-            _rowText('失效条件', trade.invalidationCondition),
+            _kvRow('开仓理由', trade.entryReason),
+            _kvRow('Thesis', trade.thesis),
+            _kvRow('预期', trade.expectation),
+            _kvRow('失效条件', trade.invalidationCondition),
           ],
         ),
         LabeledSection(
           title: 'Leg 列表',
+          subtitle: '拆分每一腿，回看仓位结构与动作节奏。',
+          action: OutlinedButton.icon(
+            onPressed: () => _go('/legs/new?tradeId=${trade.id}'),
+            icon: const Icon(Icons.add),
+            label: const Text('添加 Leg'),
+          ),
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: OutlinedButton.icon(
-                onPressed: () => _go('/legs/new?tradeId=${trade.id}'),
-                icon: const Icon(Icons.add),
-                label: const Text('添加 Leg'),
-              ),
-            ),
             if (_legs.isEmpty)
-              const Text('暂无 Leg')
+              Text('暂无 Leg', style: Theme.of(context).textTheme.bodySmall)
             else
-              ..._legs.map(
-                (leg) => Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('${leg.symbol} (${leg.direction.label})'),
-                        Text('工具: ${leg.instrumentType.label}'),
-                        if (leg.note != null && leg.note!.isNotEmpty)
-                          Text('备注: ${leg.note}'),
-                        const SizedBox(height: 6),
-                        Wrap(
-                          spacing: 8,
-                          children: [
-                            TextButton(
-                              onPressed: () => _go('/legs/${leg.id}/edit'),
-                              child: const Text('编辑'),
-                            ),
-                            TextButton(
-                              onPressed: () => _go(
-                                '/events/new?tradeId=${trade.id}&scope=leg&legId=${leg.id}',
-                              ),
-                              child: const Text('添加事件'),
-                            ),
-                            TextButton(
-                              onPressed: () => _deleteLeg(leg.id),
-                              child: const Text('删除'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              ..._legs.map(_buildLegCard),
           ],
         ),
         LabeledSection(
           title: '事件时间线',
+          subtitle: '按时间回放关键动作与市场判断变化。',
+          action: OutlinedButton.icon(
+            onPressed: () => _go('/events/new?tradeId=${trade.id}&scope=trade'),
+            icon: const Icon(Icons.add_comment_outlined),
+            label: const Text('添加事件'),
+          ),
           children: [
             if (_timeline.isEmpty)
-              const Text('暂无事件')
+              Text('暂无事件', style: Theme.of(context).textTheme.bodySmall)
             else
-              ..._timeline.map(
-                (event) => Card(
-                  child: ListTile(
-                    title: Text(
-                      '${event.eventType.label} · ${event.scopeType.label}'
-                      '${event.legId == null ? '' : ' · Leg ${event.legId}'}',
-                    ),
-                    subtitle: Text(
-                      '${formatDateTime(event.eventTime)}\n'
-                      '${event.title ?? ''}\n'
-                      '${event.note}\n'
-                      '附件: ${event.attachments.length}',
-                    ),
-                    isThreeLine: true,
-                    trailing: PopupMenuButton<String>(
-                      onSelected: (value) {
-                        if (value == 'edit') {
-                          _go('/events/${event.id}/edit');
-                        } else if (value == 'delete') {
-                          _deleteEvent(event.id);
-                        }
-                      },
-                      itemBuilder: (_) => const [
-                        PopupMenuItem(value: 'edit', child: Text('编辑')),
-                        PopupMenuItem(value: 'delete', child: Text('删除')),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              ..._timeline.map(_buildEventCard),
           ],
         ),
         LabeledSection(
           title: '复盘区',
+          subtitle: '沉淀本次交易的执行质量与经验。',
+          action: OutlinedButton.icon(
+            onPressed: () => _go('/trades/${trade.id}/review'),
+            icon: const Icon(Icons.edit_note),
+            label: Text(trade.status == TradeStatus.closed ? '编辑复盘' : '编辑草稿'),
+          ),
           children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: OutlinedButton.icon(
-                onPressed: () => _go('/trades/${trade.id}/review'),
-                icon: const Icon(Icons.edit_note),
-                label: Text(
-                  trade.status == TradeStatus.closed ? '编辑复盘' : '编辑复盘草稿',
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            _rowText('执行评分', trade.reviewScoreExecution?.toString()),
-            _rowText('结果评分', trade.reviewScoreResult?.toString()),
-            _rowText('按计划执行', trade.reviewPlanFollowed?.label),
-            _rowText('复盘标签', trade.reviewErrorTags.join(', ')),
-            _rowText('复盘文本', trade.reviewText),
+            _kvRow('执行评分', trade.reviewScoreExecution?.toString()),
+            _kvRow('结果评分', trade.reviewScoreResult?.toString()),
+            _kvRow('按计划执行', trade.reviewPlanFollowed?.label),
+            _kvRow('复盘标签', trade.reviewErrorTags.join(', ')),
+            _kvRow('复盘文本', trade.reviewText),
           ],
         ),
       ],
     );
   }
 
-  Widget _rowText(String label, String? value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Text('$label: ${value == null || value.isEmpty ? '-' : value}'),
+  Widget _buildTopCard(Trade trade) {
+    final statusColor = _statusColor(trade.status);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF0E7EA3), Color(0xFF1CA1BA)],
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(
+                trade.title,
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  trade.status.label,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: statusColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _topMeta('市场 ${trade.market.label}'),
+              _topMeta('策略 ${trade.strategyType.label}'),
+              _topMeta('结构 ${trade.structureType.label}'),
+              _topMeta('PnL ${formatNumber(trade.summaryPnl)}'),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            '时间: ${formatDateTime(trade.startTime)} -> ${formatDateTime(trade.endTime)}',
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: const Color(0xFFDBF5FF)),
+          ),
+          if (trade.tags.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              '标签: ${trade.tags.join(', ')}',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: const Color(0xFFDBF5FF)),
+            ),
+          ],
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              OutlinedButton.icon(
+                onPressed: () => _go('/trades/${trade.id}/edit'),
+                icon: const Icon(Icons.edit),
+                label: const Text('编辑交易'),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => _go('/trades/${trade.id}/close'),
+                icon: const Icon(Icons.flag_outlined),
+                label: const Text('结束交易'),
+              ),
+              OutlinedButton.icon(
+                onPressed: _toggleArchive,
+                icon: const Icon(Icons.archive_outlined),
+                label: Text(
+                  trade.status == TradeStatus.archived ? '取消归档' : '归档',
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
+  }
+
+  Widget _topMeta(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: const Color(0x22000000),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        text,
+        style: Theme.of(
+          context,
+        ).textTheme.bodySmall?.copyWith(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildLegCard(Leg leg) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      color: const Color(0xFFF8FCFF),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${leg.symbol} (${leg.direction.label})',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '工具 ${leg.instrumentType.label}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            if (leg.note != null && leg.note!.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(leg.note!),
+            ],
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                TextButton(
+                  onPressed: () => _go('/legs/${leg.id}/edit'),
+                  child: const Text('编辑'),
+                ),
+                TextButton(
+                  onPressed: () => _go(
+                    '/events/new?tradeId=${_trade!.id}&scope=leg&legId=${leg.id}',
+                  ),
+                  child: const Text('添加事件'),
+                ),
+                TextButton(
+                  onPressed: () => _deleteLeg(leg.id),
+                  child: const Text('删除'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEventCard(Event event) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      color: const Color(0xFFF8FCFF),
+      child: ListTile(
+        leading: Container(
+          width: 34,
+          height: 34,
+          decoration: BoxDecoration(
+            color: AppTheme.bgMuted,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            _timelineIcon(event),
+            size: 18,
+            color: AppTheme.inkStrong,
+          ),
+        ),
+        title: Text(
+          '${event.eventType.label} · ${event.scopeType.label}${event.legId == null ? '' : ' · Leg'}',
+        ),
+        subtitle: Text(
+          '${formatDateTime(event.eventTime)}\n${event.title ?? ''}\n${event.note}\n附件 ${event.attachments.length}',
+        ),
+        isThreeLine: true,
+        trailing: PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'edit') {
+              _go('/events/${event.id}/edit');
+            } else if (value == 'delete') {
+              _deleteEvent(event.id);
+            }
+          },
+          itemBuilder: (_) => const [
+            PopupMenuItem(value: 'edit', child: Text('编辑')),
+            PopupMenuItem(value: 'delete', child: Text('删除')),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _kvRow(String label, String? value) {
+    final text = value == null || value.isEmpty ? '-' : value;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: Theme.of(context).textTheme.bodySmall),
+          const SizedBox(height: 2),
+          Text(text),
+        ],
+      ),
+    );
+  }
+
+  Color _statusColor(TradeStatus status) {
+    switch (status) {
+      case TradeStatus.active:
+        return const Color(0xFF0A8A6A);
+      case TradeStatus.closed:
+        return const Color(0xFF0A7FA6);
+      case TradeStatus.draft:
+        return const Color(0xFF5C6D7D);
+      case TradeStatus.archived:
+        return const Color(0xFF755F2A);
+    }
+  }
+
+  IconData _timelineIcon(Event event) {
+    switch (event.eventType) {
+      case EventType.open:
+        return Icons.login_rounded;
+      case EventType.add:
+        return Icons.add_circle_outline;
+      case EventType.reduce:
+        return Icons.remove_circle_outline;
+      case EventType.close:
+        return Icons.logout_rounded;
+      case EventType.moveStop:
+      case EventType.moveTarget:
+        return Icons.swap_horiz_rounded;
+      case EventType.hedge:
+      case EventType.roll:
+        return Icons.change_circle_outlined;
+      case EventType.marketEvent:
+      case EventType.thesisUpdate:
+      case EventType.planUpdate:
+      case EventType.generalNote:
+        return Icons.notes_rounded;
+    }
   }
 }

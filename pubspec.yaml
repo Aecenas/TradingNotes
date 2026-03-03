@@ -41,6 +41,7 @@ dependencies:
   uuid: ^4.5.1
   intl: ^0.20.2
   crypto: ^3.0.7
+  google_fonts: ^6.3.2
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -91,3 +92,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+hooks:
+  user_defines:
+    sqlite3:
+      source: system
+      name_android: sqlcipher
+      name: sqlite3
